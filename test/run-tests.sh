@@ -113,7 +113,7 @@ if [ "$LIVE" -eq 1 ]; then
   command -v codex >/dev/null 2>&1 || { echo "SKIP live: codex CLI not installed"; echo "--- $PASS passed, $FAIL failed ---"; exit $((FAIL>0)); }
   live_tier() { # <tier-flag> <expected-model>
     local M; M="$(mktemp /tmp/eff-codex-marker-XXXXXX)"; sleep 1
-    "$ROUTE" "$1" "Reply with exactly: ROUTED" -C /tmp </dev/null >/dev/null 2>&1 || { bad "live $1: codex-route exited non-zero"; rm -f "$M"; return; }
+    "$ROUTE" "$1" "Reply with exactly: ROUTED" -C /tmp --no-git-check </dev/null >/dev/null 2>&1 || { bad "live $1: codex-route exited non-zero"; rm -f "$M"; return; }
     if python3 - "$M" "$HOME/.codex/sessions" "$2" <<'EOF'
 import sys, os, json, pathlib
 marker=os.path.getmtime(sys.argv[1]); root=pathlib.Path(sys.argv[2]); want=sys.argv[3]

@@ -1,7 +1,8 @@
-# NOT FUNCTIONAL on Codex CLI 0.144.4: file-based agent pins in ~/.codex/agents/ are
-# not loaded by this build (a spawned subagent inherits the main model). This file is
-# role/instruction documentation and forward-compat for when OpenAI ships agent
-# pinning. To route models today, use per-invocation `-m` (see README / efficient-codex).
+# MODEL PIN NOT EFFECTIVE on Codex CLI 0.144.4: a per-agent model/effort pin in
+# ~/.codex/agents/ did not take effect in our tests (a spawned subagent inherits the main
+# model regardless). This file is role/instruction documentation and forward-compat for
+# when per-agent model pinning ships. To route models today, use per-invocation `-m`
+# (see README / efficient-codex).
 
 name = "terra-builder"
 description = "Pragmatic daily coding agent for feature implementation, ordinary debugging, refactoring, tests, repository exploration, and validation."

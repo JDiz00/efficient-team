@@ -122,7 +122,7 @@ the rollout log, fail-closed:
 ```bash
 ./test/run-tests.sh          # static + deterministic tier-flag matrix (no tokens)
 ./test/run-tests.sh --live   # real --luna and --terra calls; verifies the rollout log
-                             # turn_context.model shows the right tier
+                             # turn_context.payload.model shows the right tier
 ```
 
 ## Layout

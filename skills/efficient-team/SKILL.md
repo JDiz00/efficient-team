@@ -22,12 +22,7 @@ Both companion skills ship in this package: `efficient-opus`, `efficient-codex`.
    ```
    Then continue — the discipline does not depend on the choice.
 3. **Arm Codex routing.** From now on, route every Codex call to the right tier (table
-   below) via `codex-route` (shipped in this package). Optionally set the discipline flag so
-   any wrapper that reads it auto-carries `Use $efficient-codex.` into Codex's context:
-   ```bash
-   touch ~/.codex/efficient-codex.on
-   ```
-   (The flag is a convenience; `codex-route` routes regardless of it.)
+   below) via `codex-route` (shipped in this package).
 4. **Verify + report** in exactly this shape:
    `Efficient Team: ON · Claude=efficient-opus loaded · Codex routing armed (codex-route)`
 
@@ -57,16 +52,13 @@ pass `-m gpt-5.6-<tier>` yourself.
 
 ## Turning OFF
 
-```bash
-rm -f ~/.codex/efficient-codex.on
-```
-Confirm removal, stop applying efficient-opus discipline, stop adding tier flags, and report:
-`Efficient Team: OFF · flag removed · efficient-opus discipline released`
+Efficient Team is session discipline, not persistent state — stop applying efficient-opus and
+stop adding tier flags to Codex calls, and report:
+`Efficient Team: OFF · efficient-opus discipline released`
 
 ## Notes
 
-- The flag is **machine-wide and persistent**: it makes wrapper calls that read it carry the
-  skill directive in every session, and survives restarts until turned off. Say this the first
-  time it's enabled in a session so no one is surprised later. (It only carries the routing
-  *skill*; the tier *choice* is Claude's per call.)
+- The discipline lasts for the session it's enabled in. Re-invoke `/efficient-team` in a new
+  session to turn it back on. (It carries the routing *approach*; the tier *choice* is Claude's
+  per call.)
 - Verify a route took effect from the rollout log, not a self-report — see efficient-codex.

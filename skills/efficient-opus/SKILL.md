@@ -57,9 +57,9 @@ saves.
 | **high** (default) | Main-loop judgment; leave it alone unless you have a reason |
 | **max** | One deliberately-chosen hardest bounded problem, not a session default - thinking tokens bill as output |
 
-Cheap pre-delegation reflexes that avoid spawning anything: `semble search` (~98% cheaper
-than grep+read for intent search), `graphify query` for architecture questions, reading only
-the line ranges you need.
+Cheap pre-delegation reflexes that avoid spawning anything: use a semantic/intent code-search
+tool if you have one (far cheaper than grep+read across many files), a code-graph query for
+architecture questions, and read only the line ranges you actually need.
 
 ## Context Hygiene (token burn is compounding, not additive)
 
@@ -113,20 +113,13 @@ with the premium model.
 - Highly coupled edits across shared files - coordination overhead exceeds savings.
 - Validation that itself needs delicate judgment - keep it in the main loop.
 
-## Enforcement Layers (this stack)
+## Optional: enforce it with a hook
 
-1. `~/.claude/CLAUDE.md` §Model Selection - always-on routing rule.
-2. `~/.claude/hooks/subagent-model-router.py` - PreToolUse **auto-router**: on a
-   fable/opus main loop, a *generic* Agent/Task spawn (general-purpose/Explore/claude)
-   with no `model` is auto-pinned via `updatedInput` - recall to haiku,
-   judgment (review/security/architecture/diagnosis) to opus, everything else to a sonnet
-   floor. Quality guards: an explicit `model` is never overridden; **named** specialist
-   agents are advised-only, never silently downgraded. So whenever you want a specific
-   tier, set `model` on the spawn and the hook stays out of the way. It only acts on
-   *delegated* work - it cannot make a single-loop session cheaper. Kill-switch:
-   `SUBAGENT_ROUTER=off` or `touch ~/.claude/hooks/subagent-router.off`. Tests: `python3
-   ~/.claude/hooks/test_subagent_model_router.py` (15 cases).
-3. This skill - the deep guidance, loaded on demand.
+The routing above is a discipline the operator applies. If you want it enforced automatically,
+a `PreToolUse` hook can auto-pin unrouted subagent spawns on a premium main loop (recall work →
+haiku, judgment → opus, everything else → a sonnet floor), while never overriding an explicit
+`model`. That hook is not bundled here — it's an optional add-on you'd write for your own setup;
+the skill works fully without it.
 
 ## Honest Expectations
 
