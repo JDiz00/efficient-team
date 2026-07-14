@@ -4,13 +4,7 @@ Copyright (c) 2026 JDiz00
 The source code in this repository (skills, scripts, docs) is licensed under the
 MIT License — see LICENSE.
 
-The GeistPixel font embedded in overview/efficient-team.html is a separate work,
-licensed under the SIL Open Font License, Version 1.1:
-
-  Copyright 2026 The Geist Pixel Project Authors
-  https://github.com/vercel/geistpixel-font
-  License text: overview/fonts/GeistPixel-OFL.txt
-
-The OFL is not the MIT License and applies only to the font software. The font is
-included for the demo page's typography; the routing tool itself does not depend
-on it.
+The screenshots in README (.github/assets/) were rendered using the GeistPixel
+font by The Geist Pixel Project (https://github.com/vercel/geistpixel-font),
+licensed under the SIL Open Font License 1.1. The font itself is not redistributed
+in this repository — only its rendered output appears in the image previews.

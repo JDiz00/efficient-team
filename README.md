@@ -6,8 +6,6 @@ Run OpenAI Codex and Anthropic Claude together, and route **every** call — on 
 the cheapest model tier that can actually do the job. Same output, a fraction of the token
 cost. Three skills plus a portable wrapper, all in one repo, one install.
 
-**Live demo / explainer page:** https://jdiz00.github.io/efficient-team/
-
 - **`efficient-codex`** (Codex skill) — routes each Codex call to a GPT-5.6 tier: mechanical
   sweeps → `gpt-5.6-luna`, everyday engineering → `gpt-5.6-terra`, architecture / security /
   review → `gpt-5.6-sol`. The model is chosen **at invocation** (caller-routed).
@@ -63,8 +61,8 @@ A worked example on a 1M-token, 60/25/15 mix (cheap / mid / flagship) at July-20
 guaranteed part. End-to-end savings on a real task depend on the workload mix — how much is
 genuinely mechanical vs judgment, plus flagship review passes and re-runs. The honest claim is
 "route each call to the cheapest capable tier; savings vary by workload," not a fixed multiple. The
-demo page (`overview/efficient-team.html`) shows one **measured** Codex run (73% on the routed
-portion) alongside the projected Claude figures, labeled as such.
+figures above pair one **measured** Codex run (73% saved on the routed portion) with the projected
+Claude numbers, labeled as such.
 
 ## Requirements
 
@@ -138,7 +136,6 @@ skills/efficient-codex/SKILL.md   Codex-side tier routing policy
 skills/efficient-opus/SKILL.md    Claude-side subagent routing policy
 skills/efficient-team/SKILL.md    one-switch combiner (+ routing table)
 bin/codex-route                   portable tier-routing wrapper
-overview/efficient-team.html      self-contained demo / explainer page
 examples/agents/*.toml            role docs / forward-compat (NOT installed)
 install.sh / uninstall.sh
 test/run-tests.sh
@@ -150,5 +147,5 @@ project: efficient-fable (Claude Code, Fable main loop).
 
 ## License
 
-Code is MIT (see `LICENSE`). The Geist font embedded in the demo page is under the SIL Open
-Font License 1.1 (see `NOTICE` and `overview/fonts/GeistPixel-OFL.txt`).
+Code is MIT (see `LICENSE`). The README preview images were rendered with the GeistPixel font
+(SIL Open Font License 1.1) — credited in `NOTICE`; the font itself is not redistributed here.
