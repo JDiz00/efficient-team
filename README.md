@@ -1,8 +1,12 @@
 # efficient-team
 
+![Efficient Team — route every Claude and Codex call to the cheapest capable model tier](.github/assets/hero.png)
+
 Run OpenAI Codex and Anthropic Claude together, and route **every** call — on both sides — to
 the cheapest model tier that can actually do the job. Same output, a fraction of the token
 cost. Three skills plus a portable wrapper, all in one repo, one install.
+
+**Live demo / explainer page:** https://jdiz00.github.io/efficient-team/
 
 - **`efficient-codex`** (Codex skill) — routes each Codex call to a GPT-5.6 tier: mechanical
   sweeps → `gpt-5.6-luna`, everyday engineering → `gpt-5.6-terra`, architecture / security /
@@ -52,6 +56,8 @@ A worked example on a 1M-token, 60/25/15 mix (cheap / mid / flagship) at July-20
 |---|---|---|---|
 | **Codex** (Sol / Terra / Luna) | $11.25 | $4.44 | ~61% |
 | **Claude** (Opus / Sonnet / Haiku) | $10.00 | $4.20 | ~58% |
+
+![Cost math: Codex measured 73% on the routed work, Claude projected 58%](.github/assets/cost-math.png)
 
 **Honest scope of the saving.** The per-token ratio (2×/5× on Codex, 1.7×/5× on Claude) is the
 guaranteed part. End-to-end savings on a real task depend on the workload mix — how much is
