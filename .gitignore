@@ -1,0 +1,9 @@
+# Internal working handoff — not for public consumption
+efficient-codex-handoff.md
+
+# Playwright CLI artifacts
+.playwright-cli/
+
+# OS / editor noise
+.DS_Store
+*.swp

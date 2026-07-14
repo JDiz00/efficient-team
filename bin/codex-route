@@ -1,0 +1,61 @@
+#!/usr/bin/env bash
+# codex-route — portable reference wrapper for efficient-codex tier routing.
+# Runs `codex exec` on a chosen GPT-5.6 tier (Luna / Terra / Sol) with the tier's
+# default reasoning effort, verifiable in the rollout log.
+#
+# Usage:
+#   codex-route --luna  "inventory every file importing db.py" [-C dir]
+#   codex-route --terra "implement the /health route per SPEC"  [-C dir]
+#   codex-route --sol   "adversarial review of this auth diff"  -C dir --xhigh
+#   codex-route --luna -C dir -- "-prompt that starts with a dash"
+#
+# Tiers set model + default effort:  --luna=luna/low  --terra=terra/medium  --sol=sol/high
+# --high / --xhigh override the effort but keep the tier's model.
+# -C/--cd <dir> sets the working root (default "."). Exactly one prompt is required.
+# `--` ends option parsing so a prompt may start with a dash. Put -C BEFORE -- (after --,
+#   every token is the prompt/positional). Extra positionals are rejected.
+# --no-git-check skips Codex's "must be in a git repo" guard (off by default, so a mistyped
+#   -C into a non-repo directory still gets Codex's normal refusal).
+# Exactly one tier flag is required. Conflicting tier flags exit 2.
+set -euo pipefail
+
+MODEL=""; EFFORT=""; TIER=""; EFFORT_EXPLICIT=""; PROMPT=""; DIR="."; HAVE_PROMPT=0; ENDOPTS=0; GIT_CHECK=1
+set_tier() {
+  if [ -n "$TIER" ] && [ "$TIER" != "$1" ]; then
+    echo "codex-route: conflicting tier flags ($TIER and $1) — pick one." >&2; exit 2
+  fi
+  TIER="$1"; MODEL="$2"; EFFORT="$3"
+}
+take_positional() {
+  if [ "$HAVE_PROMPT" -eq 0 ]; then PROMPT="$1"; HAVE_PROMPT=1
+  else echo "codex-route: unexpected extra argument: $1 (dir goes after -C)" >&2; exit 2; fi
+}
+while [ $# -gt 0 ]; do
+  if [ "$ENDOPTS" -eq 1 ]; then take_positional "$1"; shift; continue; fi
+  case "$1" in
+    --)      ENDOPTS=1 ;;
+    --luna)  set_tier --luna  gpt-5.6-luna  low ;;
+    --terra) set_tier --terra gpt-5.6-terra medium ;;
+    --sol)   set_tier --sol   gpt-5.6-sol   high ;;
+    --high)  EFFORT_EXPLICIT="high" ;;
+    --xhigh) EFFORT_EXPLICIT="xhigh" ;;
+    --no-git-check) GIT_CHECK=0 ;;
+    -C|--cd) shift; [ $# -gt 0 ] || { echo "codex-route: -C needs a directory" >&2; exit 2; }; DIR="$1" ;;
+    -*)      echo "codex-route: unknown flag: $1 (use -- before a prompt that starts with a dash)" >&2; exit 2 ;;
+    *)       take_positional "$1" ;;
+  esac
+  shift
+done
+
+[ -z "$TIER" ]       && { echo "codex-route: a tier flag is required (--luna | --terra | --sol)" >&2; exit 2; }
+[ "$HAVE_PROMPT" -eq 0 ] && { echo "codex-route: a prompt is required" >&2; exit 2; }
+[ -n "$EFFORT_EXPLICIT" ] && EFFORT="$EFFORT_EXPLICIT"
+command -v codex >/dev/null 2>&1 || { echo "codex-route: codex CLI not found (npm i -g @openai/codex)" >&2; exit 1; }
+
+echo "codex-route: model=$MODEL effort=$EFFORT dir=$DIR" >&2
+GIT_ARG=(); [ "$GIT_CHECK" -eq 0 ] && GIT_ARG=(--skip-git-repo-check)
+# `-- "$PROMPT"` last so a prompt starting with a dash is never parsed as a codex exec option.
+exec codex exec \
+  -C "$DIR" "${GIT_ARG[@]}" \
+  -m "$MODEL" -c "model_reasoning_effort=\"$EFFORT\"" \
+  -- "$PROMPT"
